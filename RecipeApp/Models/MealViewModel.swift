@@ -5,35 +5,36 @@
 //  Created by 谢璐阳 on 7/24/24.
 //
 
-import SwiftUI
-import Combine
+import Foundation
 
 class MealViewModel: ObservableObject {
     @Published var meals: [Meal] = []
     @Published var selectedMeal: MealDetail?
     
     func fetchMeals() {
-        NetworkService.shared.fetchMeals { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let meals):
+        Task {
+            do {
+//                let meals = try await NetworkService.shared.fetchMeals()
+                var meals = try await NetworkService.shared.fetchMeals()
+                meals.sort { $0.name < $1.name }
+                DispatchQueue.main.async {
                     self.meals = meals
-                case .failure(let error):
-                    print("Error fetching meals: \(error.localizedDescription)")
                 }
+            } catch {
+                print("Error fetching meals: \(error.localizedDescription)")
             }
         }
     }
     
     func fetchMealDetails(mealID: String) {
-        NetworkService.shared.fetchMealDetails(mealID: mealID) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let mealDetail):
+        Task {
+            do {
+                let mealDetail = try await NetworkService.shared.fetchMealDetails(mealID: mealID)
+                DispatchQueue.main.async {
                     self.selectedMeal = mealDetail
-                case .failure(let error):
-                    print("Error fetching meal details: \(error.localizedDescription)")
                 }
+            } catch {
+                print("Error fetching meal details: \(error.localizedDescription)")
             }
         }
     }
