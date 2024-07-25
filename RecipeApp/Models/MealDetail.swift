@@ -10,12 +10,14 @@ struct MealDetail: Decodable {
     let id: String
     let name: String
     let instructions: String
+    let thumbnail: String
     let ingredients: [String]
     
     enum CodingKeys: String, CodingKey {
         case id = "idMeal"
         case name = "strMeal"
         case instructions = "strInstructions"
+        case thumbnail = "strMealThumb"
     }
     
     init(from decoder: Decoder) throws {
@@ -23,6 +25,7 @@ struct MealDetail: Decodable {
         id = try container.decode(String.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
         instructions = try container.decode(String.self, forKey: .instructions)
+        thumbnail = try container.decode(String.self, forKey: .thumbnail)
         
         let rawValues = try decoder.singleValueContainer().decode([String: String?].self)
         var ingredients: [String] = []
