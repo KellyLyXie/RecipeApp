@@ -13,6 +13,6 @@ This is an iOS application that allows users to browse and view details of desse
 - Xcode 13.0 or later
 
 ## Installation
-**Clone the repository**:
+**Clone the repository**
 
   
